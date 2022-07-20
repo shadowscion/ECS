@@ -2,6 +2,7 @@
 ECS.Plugin = "selection"
 
 
+--
 ECS:AddCommand( "select", "", function( ply, trace, params )
     if ECS.CanTool( ply, trace.Entity ) then
         ECS.SelectEntity( ply, trace.Entity )
@@ -9,6 +10,7 @@ ECS:AddCommand( "select", "", function( ply, trace, params )
 end )
 
 
+--
 ECS:AddCommand( "selectsphere", "radius", function( ply, trace, params )
     local radius = tonumber( params[1] ) or 0
     local ents = ECS.Filter( ply, ents.FindInSphere( trace.HitPos, radius ) )
@@ -19,11 +21,13 @@ ECS:AddCommand( "selectsphere", "radius", function( ply, trace, params )
 end )
 
 
+--
 ECS:AddCommand( "deselect", "", function( ply, trace, params )
     ECS.DeselectEntity( ply, trace.Entity )
 end )
 
 
+--
 ECS:AddCommand( "deselectall", "", function( ply, trace, params )
     for ent in pairs( ECS.GetSelection( ply ) ) do
         ECS.DeselectEntity( ply, ent )
@@ -31,6 +35,7 @@ ECS:AddCommand( "deselectall", "", function( ply, trace, params )
 end )
 
 
+--
 ECS:AddCommand( "deselectsphere", "radius", function( ply, trace, params )
     local radius = tonumber( params[1] ) or 0
     local ents = ECS.Filter( ply, ents.FindInSphere( trace.HitPos, radius ) )

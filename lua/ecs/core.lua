@@ -2,11 +2,10 @@
 local ECS = ECS
 
 function ECS.AddCommand( self, name, param, func )
-    if self.Commands[name] then return end
-    self.Commands[name] = { plugin = self.Plugin, func = SERVER and func or nil, autocomplete = CLIENT and string.format( "ecs %s %s", name, param ) or nil }
-
+    self.Commands[name] = { plugin = self.Plugin, func = SERVER and func or nil, autocomplete = string.format( "ecs %s %s", name, param ) }
     return self.Commands[name]
 end
+
 
 if SERVER then
 
@@ -87,24 +86,25 @@ if SERVER then
             return
         end
 
-        ECS.Selections[ply][ent] = { Color = ent:GetColor(), Material = ent:GetMaterial() }
+        ECS.Selections[ply][ent] = { Color = ent:GetColor(), Material = ent:GetMaterial(), Mode = ent:GetRenderMode() }
 
         ent:SetColor( SELECT_COL )
         ent:SetMaterial( SELECT_MAT )
     end
 
     function ECS.DeselectEntity( ply, ent )
-        if ECS.Selections[ply] and ECS.Selections[ply][ent] then
+        if ECS.Selections[ply] and IsValid( ent ) and ECS.Selections[ply][ent] then
             local data = ECS.Selections[ply][ent]
 
             ent:SetColor( data.Color )
             ent:SetMaterial( data.Material )
-
-            ECS.Selections[ply][ent] = nil
+            ent:SetRenderMode( data.Mode )
         end
+
+        ECS.Selections[ply][ent] = nil
     end
 
-    function ECS.GetSelection( ply, toolmode )
+    function ECS.GetSelection( ply )
         if not ECS.Selections[ply] then
             ECS.Selections[ply] = {}
         end
