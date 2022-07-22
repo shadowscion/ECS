@@ -120,10 +120,29 @@ else
 
     ]]
 
+    ECS.Commands.getinfo = { plugin = "debug", autocomplete = "ecs getinfo", clientFunc = function( ply, trace, params )
+        local ent = trace.Entity
+
+        local yel = Color( 255, 255, 0 )
+        local wht = Color( 255, 255, 255 )
+
+        MsgC( yel, "ent:      ", wht, ent, "\n" )
+        MsgC( yel, "pos:      ", wht, ent:GetPos(), "\n" )
+        MsgC( yel, "ang:      ", wht, ent:GetAngles(), "\n" )
+        MsgC( yel, "material: ", wht, ent:GetMaterial(), "\n" )
+        MsgC( yel, "color:    ", wht, tostring( ent:GetColor() ), "\n" )
+        MsgC( yel, "model:    ", wht, ent:GetModel(), "\n\n" )
+    end }
+
     local function Send( ply, cmd, args )
         local name = table.remove( args, 1 )
 
         if not ECS.Commands[name] then
+            return
+        end
+
+        if ECS.Commands[name].clientFunc then
+            ECS.Commands[name].clientFunc( ply, ply:GetEyeTraceNoCursor(), args )
             return
         end
 
