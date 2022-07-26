@@ -29,7 +29,7 @@ local function move( ent, vec, isLocal )
     ent:SetPos( vec )
 end
 
-local function rotate( ent, ang )
+local function rotate( ent, ang, isLocal )
     local rot
     if isLocal then
         rot = ent:LocalToWorldAngles( ang )
@@ -99,8 +99,10 @@ ECS:AddCommand( "setang", "p y r", function( ply, trace, params )
     end
 
     for sel in pairs( ents ) do
-        setNotFrozen( sel, false )
-        sel:SetAngles( ang )
+        if IsValid( sel ) then
+            setNotFrozen( sel, false )
+            sel:SetAngles( ang )
+        end
     end
 end )
 
@@ -127,7 +129,9 @@ ECS:AddCommand( "rotate", "p y r local", function( ply, trace, params )
     end
 
     for sel in pairs( ents ) do
-        rotate( sel, ang, isLocal )
+        if IsValid( sel ) then
+            rotate( sel, ang, isLocal )
+        end
     end
 end )
 
@@ -152,7 +156,9 @@ ECS:AddCommand( "move", "x y z local", function( ply, trace, params )
     end
 
     for sel in pairs( ents ) do
-        move( sel, vec, isLocal )
+        if IsValid( sel ) then
+            move( sel, vec, isLocal )
+        end
     end
 end )
 
@@ -170,7 +176,9 @@ ECS:AddCommand( "freeze", "", function( ply, trace, params )
     end
 
     for sel in pairs( ents ) do
-        setNotFrozen( sel, false )
+        if IsValid( sel ) then
+            setNotFrozen( sel, false )
+        end
     end
 end )
 
@@ -188,6 +196,8 @@ ECS:AddCommand( "unfreeze", "", function( ply, trace, params )
     end
 
     for sel in pairs( ents ) do
-        setNotFrozen( sel, true )
+        if IsValid( sel ) then
+            setNotFrozen( sel, true )
+        end
     end
 end )
